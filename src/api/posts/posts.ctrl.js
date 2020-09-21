@@ -11,14 +11,14 @@ const posts = [
 
 // 포스트 목록 조회
 // GET /api/posts
-exports.list = ctx => {
+export const list = ctx => {
   ctx.body = posts;
 };
 
 // 포스트 작성
 // POST /api/posts
 // { title, body }
-exports.write = ctx => {
+export const write = ctx => {
   // REST API의 Request Body는 ctx.request.body에서 조회할 수 있습니다.
   console.log(ctx);
   const { title, body } = ctx.request.body;
@@ -30,7 +30,7 @@ exports.write = ctx => {
 
 // 특정 포스트 조회
 // GET /api/posts/:id
-exports.read = ctx => {
+export const read = ctx => {
   const { id } = ctx.params;
   // 주어진 id 값으로 포스트를 찾습니다.
   const post = posts.find(p => p.id === +id);
@@ -47,7 +47,7 @@ exports.read = ctx => {
 
 // 특정 포스트 제거
 // DELETE /api/posts/:id
-exports.remove = ctx => {
+export const remove = ctx => {
   const { id } = ctx.params;
   // 해당 id를 가진 post의 index를 알아냅니다.
   const index = posts.findIndex(p => p.id === +id);
@@ -67,7 +67,7 @@ exports.remove = ctx => {
 // 포스트 수정 (교체)
 // PUT /api/posts/:id
 // { title, body }
-exports.replace = ctx => {
+export const replace = ctx => {
   // PUT methodd는 전체 포스트 정보를 입력하여 데이터를 통째로 교체할 때 사용합니다.
   const { id } = ctx.params;
   // 해당 id를 가진 post의 index를 알아냅니다.
@@ -92,7 +92,7 @@ exports.replace = ctx => {
 // 포스트 수정 (특정 필드 변경)
 // PATCH /api/posts/:id
 // { title, body }
-exports.update = ctx => {
+export const update = ctx => {
   // PATCH method는 주어진 필드만 교체합니다.
   const { id } = ctx.params;
   // 해당 id를 가진 post의 index를 알아냅니다.
