@@ -37,7 +37,7 @@ export const checkOwnPost = (ctx, next) => {
 };
 
 // 포스트 목록 조회
-// GET /api/posts
+// GET /api/posts?username=&tag=&page=
 export const list = async ctx => {
   const page = parseInt(ctx.query.page || '1');
 
@@ -46,14 +46,21 @@ export const list = async ctx => {
     return;
   }
 
+  const { tag, username } = ctx.query;
+  // tag, username 값이 유효하면 개개체 안에 넣고, 그렇지 않으면 넣지 않음
+  const query = {
+    ...(username ? { 'user.username': username } : {}),
+    ...(tag ? { tags: tag } : {}),
+  };
+
   try {
-    const posts = await Post.find()
+    const posts = await Post.find(query)
       .sort({ _id: -1 })
       .limit(10)
       .skip((page - 1) * 10)
       .lean()
       .exec();
-    const postCount = await Post.countDocuments().exec();
+    const postCount = await Post.countDocuments(query).exec();
     ctx.set('Last-Page', Math.ceil(postCount / 10));
     ctx.body = posts.map(post => ({
       ...post,
